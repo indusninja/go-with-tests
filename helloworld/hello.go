@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package helloworld
 
 const englishHelloExpression = "Hello"
 const spanishHelloExpression = "Hola"
@@ -23,8 +21,4 @@ func GetHelloExpressionInLanguage(language string) string {
 		prefix = frenchHelloExpression
 	}
 	return prefix
-}
-
-func main() {
-	fmt.Println(Hello("", "english"))
 }
