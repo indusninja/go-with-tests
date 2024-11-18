@@ -1,4 +1,4 @@
-package helloworld
+package _1_helloworld
 
 import "testing"
 

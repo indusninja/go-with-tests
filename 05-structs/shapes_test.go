@@ -1,4 +1,4 @@
-package structs
+package _5_structs
 
 import "testing"
 

@@ -1,4 +1,4 @@
-package arrays
+package _4_arrays
 
 import (
 	"slices"

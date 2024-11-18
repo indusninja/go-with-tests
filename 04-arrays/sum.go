@@ -1,4 +1,4 @@
-package arrays
+package _4_arrays
 
 // Add all numbers in the given array
 func Sum(numbers []int) int {
