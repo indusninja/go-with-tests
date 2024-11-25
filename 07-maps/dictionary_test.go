@@ -91,3 +91,21 @@ func TestUpdate(t *testing.T) {
 		assertError(t, err, ErrWordDoesNotExist)
 	})
 }
+
+func TestDelete(t *testing.T) {
+	word := "test"
+	dictionary := Dictionary{word: "test definition"}
+
+	t.Run("delete existing word", func(t *testing.T) {
+		word := "test"
+		_ = dictionary.Delete(word)
+		_, err := dictionary.Search(word)
+		assertError(t, err, ErrNotFound)
+	})
+	t.Run("delete non-existing word", func(t *testing.T) {
+		word := "test"
+		// this was already deleted by the test run above, so it should be missing
+		err := dictionary.Delete(word)
+		assertError(t, err, ErrWordDoesNotExist)
+	})
+}
