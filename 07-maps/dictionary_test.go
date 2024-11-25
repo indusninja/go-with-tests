@@ -1,11 +1,14 @@
 package _7_maps
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func assertError(t testing.TB, got, want error) {
 	t.Helper()
 
-	if got != want {
+	if !errors.Is(got, want) {
 		t.Errorf("got error '%q' want '%q'", got, want)
 	}
 }
@@ -36,8 +39,11 @@ func TestSearch(t *testing.T) {
 		want := "this is just a test"
 		assertDefinition(t, dictionary, key, want)
 	})
+
 	t.Run("unknown word", func(t *testing.T) {
-		assertDefinition(t, dictionary, "unknown", "expected to get an error.")
+		_, got := dictionary.Search("unknown")
+
+		assertError(t, got, ErrNotFound)
 	})
 }
 
@@ -48,7 +54,7 @@ func TestAdd(t *testing.T) {
 		word := "test"
 		definition := "this is just a test"
 
-		dictionary.Add(word, definition)
+		_ = dictionary.Add(word, definition)
 
 		assertDefinition(t, dictionary, word, definition)
 	})
@@ -72,13 +78,16 @@ func TestUpdate(t *testing.T) {
 		err := dictionary.Add(word, definition)
 		assertError(t, err, nil)
 		newDefinition := "new definition"
-		dictionary.Update(word, newDefinition)
+		_ = dictionary.Update(word, newDefinition)
 		assertDefinition(t, dictionary, word, newDefinition)
 	})
 	t.Run("new word", func(t *testing.T) {
-		word := "test"
-		newDefinition := "new definition"
-		err := dictionary.Update(word, newDefinition)
+		// reusing the dictionary object does not work, i.e. if `word := "test"` is used, then test does not work.
+		// since it is referencing the original object,
+		// it has been updated with the previous test run to include the value for key `test` already
+		word := "nexttest"
+		definition := "this is just a test"
+		err := dictionary.Update(word, definition)
 		assertError(t, err, ErrWordDoesNotExist)
 	})
 }

@@ -1,5 +1,9 @@
 package _7_maps
 
+import (
+	"errors"
+)
+
 const (
 	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
 	ErrWordExists       = DictionaryErr("cannot add word because it already exists")
@@ -25,10 +29,10 @@ func (d Dictionary) Search(word string) (string, error) {
 
 func (d Dictionary) Add(word, definition string) error {
 	_, err := d.Search(word)
-	switch err {
-	case ErrNotFound:
+	switch {
+	case errors.Is(err, ErrNotFound):
 		d[word] = definition
-	case nil:
+	case err == nil:
 		return ErrWordExists
 	default:
 		return err
@@ -39,10 +43,10 @@ func (d Dictionary) Add(word, definition string) error {
 func (d Dictionary) Update(word, definition string) error {
 	_, err := d.Search(word)
 
-	switch err {
-	case ErrNotFound:
+	switch {
+	case errors.Is(err, ErrNotFound):
 		return ErrWordDoesNotExist
-	case nil:
+	case err == nil:
 		d[word] = definition
 	default:
 		return err
